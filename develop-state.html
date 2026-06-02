@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuradha | Developing State</title>
+    <link rel="icon" href="assets/images/favicon.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-1: #06131f;
+            --bg-2: #0a2740;
+            --bg-3: #0f3b52;
+            --card: rgba(7, 19, 31, 0.72);
+            --text: #eaf4ff;
+            --muted: rgba(234, 244, 255, 0.72);
+            --line: rgba(255, 255, 255, 0.12);
+            --accent: #f7b84a;
+            --accent-2: #57d0ff;
+            --success: #67e3a4;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            min-height: 100%;
+            margin: 0;
+        }
+
+        body {
+            font-family: "Poppins", Arial, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(87, 208, 255, 0.18), transparent 28%),
+                radial-gradient(circle at 85% 15%, rgba(247, 184, 74, 0.18), transparent 24%),
+                linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 48%, var(--bg-3) 100%);
+            overflow-x: hidden;
+        }
+
+        .noise {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.16;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 56px 56px;
+            mask-image: radial-gradient(circle at center, black 55%, transparent 100%);
+        }
+
+        .wrap {
+            position: relative;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+        }
+
+        .panel {
+            width: min(1040px, 100%);
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 24px;
+            padding: 24px;
+            border: 1px solid var(--line);
+            border-radius: 32px;
+            background: var(--card);
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(20px);
+        }
+
+        .hero {
+            position: relative;
+            padding: 28px;
+            border-radius: 24px;
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)),
+                radial-gradient(circle at 30% 20%, rgba(87, 208, 255, 0.08), transparent 42%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: auto -20% -35% auto;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(247, 184, 74, 0.28), transparent 68%);
+            filter: blur(8px);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .brand-mark {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, rgba(247, 184, 74, 0.95), rgba(87, 208, 255, 0.82));
+            color: #09131b;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
+        }
+
+        .brand-name {
+            font-size: 14px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(234, 244, 255, 0.66);
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(103, 227, 164, 0.12);
+            color: var(--success);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+        }
+
+        .pulse {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 0 0 rgba(103, 227, 164, 0.34);
+            animation: pulse 1.8s infinite;
+        }
+
+        h1 {
+            margin: 18px 0 14px;
+            font-size: clamp(40px, 6vw, 72px);
+            line-height: 0.98;
+            letter-spacing: -0.04em;
+        }
+
+        .lead {
+            max-width: 32ch;
+            margin: 0;
+            font-size: clamp(16px, 2vw, 18px);
+            color: var(--muted);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 28px;
+        }
+
+        .info-card {
+            padding: 18px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 12px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(234, 244, 255, 0.52);
+        }
+
+        .value {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .aside {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .visual {
+            position: relative;
+            min-height: 240px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            background:
+                radial-gradient(circle at 50% 18%, rgba(87, 208, 255, 0.22), transparent 28%),
+                linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            overflow: hidden;
+            display: grid;
+            place-items: center;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(6px);
+            opacity: 0.88;
+        }
+
+        .orb.one {
+            width: 160px;
+            height: 160px;
+            background: rgba(247, 184, 74, 0.28);
+            top: 20px;
+            left: 22px;
+            animation: drift 9s ease-in-out infinite;
+        }
+
+        .orb.two {
+            width: 220px;
+            height: 220px;
+            background: rgba(87, 208, 255, 0.22);
+            right: -20px;
+            bottom: -18px;
+            animation: drift 11s ease-in-out infinite reverse;
+        }
+
+        .badge {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 18px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(6, 19, 31, 0.56);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+        }
+
+        .badge strong {
+            color: var(--accent);
+        }
+
+        .timeline {
+            padding: 18px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .timeline h2 {
+            margin: 0 0 14px;
+            font-size: 18px;
+        }
+
+        .step {
+            display: grid;
+            grid-template-columns: 22px 1fr;
+            gap: 12px;
+            align-items: start;
+            padding: 12px 0;
+        }
+
+        .step + .step {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .step i {
+            width: 12px;
+            height: 12px;
+            margin-top: 6px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            box-shadow: 0 0 0 6px rgba(87, 208, 255, 0.08);
+        }
+
+        .step strong {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .step span {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .footer {
+            margin-top: 18px;
+            color: rgba(234, 244, 255, 0.54);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(103, 227, 164, 0.34); }
+            70% { box-shadow: 0 0 0 14px rgba(103, 227, 164, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(103, 227, 164, 0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate3d(0, 0, 0); }
+            50% { transform: translate3d(-12px, -18px, 0); }
+        }
+
+        @keyframes drift {
+            0%, 100% { transform: translate3d(0, 0, 0); }
+            50% { transform: translate3d(10px, -12px, 0); }
+        }
+
+        @media (max-width: 900px) {
+            .panel {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .wrap {
+                padding: 16px;
+            }
+
+            .panel, .hero, .timeline {
+                border-radius: 22px;
+            }
+
+            .panel {
+                padding: 16px;
+                gap: 16px;
+            }
+
+            .hero {
+                padding: 20px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .visual {
+                min-height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <main class="wrap">
+        <section class="panel" aria-labelledby="page-title">
+            <div class="hero">
+                <div class="brand">
+                    <div class="brand-mark">N</div>
+                    <div>
+                        <div class="brand-name">Nuradha</div>
+                        <div style="color: rgba(234,244,255,0.82); font-size: 14px; margin-top: 2px;">Official Website</div>
+                    </div>
+                </div>
+
+                <div class="status"><span class="pulse"></span> Developing state</div>
+                <h1 id="page-title">We are building something better.</h1>
+                <p class="lead">
+                    This website is currently under development. We are polishing the layout, updating the content,
+                    and preparing the full experience before the public launch.
+                </p>
+
+                <div class="info-grid" aria-label="Project status">
+                    <div class="info-card">
+                        <span class="label">Status</span>
+                        <div class="value">Under construction</div>
+                    </div>
+                    <div class="info-card">
+                        <span class="label">Next step</span>
+                        <div class="value">Launch updates soon</div>
+                    </div>
+                </div>
+
+                <div class="footer">
+                    Thanks for your patience while we finish the website. If you need urgent help, please use the
+                    contact page or revisit later for the completed version.
+                </div>
+            </div>
+
+            <aside class="aside">
+                <div class="visual" aria-hidden="true">
+                    <div class="orb one"></div>
+                    <div class="orb two"></div>
+                    <div class="badge">
+                        <span style="width: 12px; height: 12px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 6px rgba(247,184,74,0.15);"></span>
+                        <div><strong>Preparing</strong> the full site experience</div>
+                    </div>
+                </div>
+
+                <div class="timeline">
+                    <h2>What to expect</h2>
+                    <div class="step">
+                        <i></i>
+                        <div>
+                            <strong>Fresh content</strong>
+                            <span>We are updating product and service information.</span>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <i></i>
+                        <div>
+                            <strong>Improved layout</strong>
+                            <span>The design is being refined for desktop and mobile.</span>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <i></i>
+                        <div>
+                            <strong>Launch readiness</strong>
+                            <span>The full site will return when everything is ready.</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </section>
+    </main>
+</body>
+</html>
